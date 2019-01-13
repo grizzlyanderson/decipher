@@ -1,6 +1,6 @@
 package main
 
-//go:generate go run assets_generate.go
+//go:generate go run assets/generator.go
 
 import (
 	"flag"
