@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/grizzlyanderson/decipher/calculators"
+	"github.com/labstack/gommon/log"
 	"io/ioutil"
 	"os"
 )
@@ -39,4 +40,12 @@ func main() {
 
 	ic, _ := calculators.CalcIC(charCounts)
 	fmt.Printf("I.C. is %v.\n", ic)
+
+	quadGram, err := calculators.LoadGrams(calculators.Eng, calculators.Quad)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(quadGram)
+	fmt.Printf("number of quadgrams is %v\n", len(quadGram))
+	fmt.Printf("Gram 'TION' count is %v\n", quadGram["TION"])
 }
