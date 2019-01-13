@@ -45,7 +45,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(quadGram)
+	//fmt.Println(quadGram)
 	fmt.Printf("number of quadgrams is %v\n", len(quadGram))
 	fmt.Printf("Gram 'TION' count is %v\n", quadGram["TION"])
+
+	setStates, err := calculators.GetNGramStats(calculators.Eng, calculators.Quad)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//fmt.Println(setStates)
+
+	fmt.Printf("Gram 'TION' count is %v and probability is %v\n", setStates.NGramData["TION"].Count, setStates.NGramData["TION"].Probability)
 }

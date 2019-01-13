@@ -7,6 +7,7 @@ import (
 	data2 "github.com/grizzlyanderson/decipher/data"
 	"github.com/labstack/gommon/log"
 	"io"
+	"math"
 	"strconv"
 	"strings"
 	"unicode"
@@ -48,13 +49,21 @@ func (g nGram) toString() string {
 	return names[g]
 }
 
-// need to use code from : https://web.archive.org/web/20180424121229/http://practicalcryptography.com:80/cryptanalysis/text-characterisation/quadgrams/#a-python-implementation
+type NGramStats struct {
+	Count       int
+	Probability float64
+}
 
-// should load wuad grams, but might encode all n grams for english
+func (n NGramStats) setProbablity(x float64) {
+	n.Probability = x
+}
 
-// also might build n-gram loader that can be fed files from project guttenberg
-
-// and consider https://github.com/go-bindata/go-bindata to create & embed resource files
+type NGramCollection struct {
+	NGramData map[string]NGramStats
+	GramCount int
+	ItemCount int64
+	Floor     float64
+}
 
 // LoadGrams loads NGram data from an embedded resource for the specified language and length of gram (e.g. BI gram contains 2 letters 'AA' 'AB' etc)
 // Resources are managed in assets_generate
@@ -119,6 +128,33 @@ func LoadGrams(language lang, gramLength nGram) (map[string]int, error) {
 		result[line[0]] = int(r)
 	}
 	return result, nil
+}
+
+func GetNGramStats(language lang, gramLength nGram) (NGramCollection, error) {
+	gramMap, err := LoadGrams(language, gramLength)
+	gramCollection := NGramCollection{NGramData: make(map[string]NGramStats)}
+	if err != nil {
+		return gramCollection, err
+	}
+
+	// whole collection info
+	gramCollection.GramCount = len(gramMap)
+	//gramCollection.NGramData = make(map[string]NGramStats)
+	for _, count := range gramMap {
+		gramCollection.ItemCount += int64(count)
+	}
+
+	gramCollection.Floor = math.Log10(0.01 / float64(gramCollection.ItemCount))
+
+	// probability for each gram in collection
+	for k, count := range gramMap {
+		//log.Printf("Gram: %s  Stat Count: %v   Total Item Count: %v", k, gramStat.Count, gramCollection.ItemCount)
+		value := float64(count) / float64(gramCollection.ItemCount)
+		prob := math.Log10(value)
+		gramCollection.NGramData[k] = NGramStats{Count: count, Probability: prob}
+	}
+
+	return gramCollection, nil
 }
 
 func normalize(ciphertext []byte) []byte {
