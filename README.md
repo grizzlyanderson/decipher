@@ -20,6 +20,17 @@ NATOX CIAFB IIRSX
 * *embedding resources* into the binary. In this case ngram data for the english language.
 I chose not to use the go-bindata library as it has been forked like crazy since being abandomed.
 Instead I'm using vfsgen, but also considered fileb0x. 
-**TODO** - I may have shot myself in the foot there by moving the generator to the assets folder. 
+**TODO** - I may have shot myself in the foot there by moving the generator to the assets folder.
+
+## Source for actual cryptanalsis stuff
+I definitely don't have this stuff down cold.  
+
+* [Practical Cryptography] (http://practicalcryptography.com/)
+
+   This site was sometimes very slow or down. The [Internet Archive](https://web.archive.org/web/sitemap/practicalcryptography.com) has a good copy as well.
+   
+* Elementary Cryptanalysis by Helen Fouché Gaines, c. 1939
+
+   Nope, not the Red Book. That's way too up-to-date for this old-school stuff.
 
 
