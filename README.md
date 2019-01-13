@@ -25,7 +25,7 @@ Instead I'm using vfsgen, but also considered fileb0x.
 ## Source for actual cryptanalsis stuff
 I definitely don't have this stuff down cold.  
 
-* [Practical Cryptography] (http://practicalcryptography.com/)
+* [Practical Cryptography](http://practicalcryptography.com/)
 
    This site was sometimes very slow or down. The [Internet Archive](https://web.archive.org/web/sitemap/practicalcryptography.com) has a good copy as well.
    
