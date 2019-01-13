@@ -6,7 +6,7 @@ func isSpace(b byte) bool {
 	return b == ' ' || b == '\t' || b == '\n' || b == '\r'
 }
 
-// Get a count of each unique character in a []byte
+// CountByCharacters gets a count of each unique character in a []byte
 // Whitespace characters are normally ignored but all other characters are counted
 // For most uses the string should be normalized to uppercase, no punctuation or control characters
 func CountByCharacters(cypherChars []byte, ignoreWitespace bool) (charCounts map[string]int, err error) {
@@ -20,7 +20,7 @@ func CountByCharacters(cypherChars []byte, ignoreWitespace bool) (charCounts map
 	return charCounts, nil
 }
 
-// calculate the Index of Coincidence for map of counts by character from a ciphertext
+// CalcIC returns Index of Coincidence for map of counts by character from a ciphertext
 // See http://practicalcryptography.com/cryptanalysis/text-characterisation/index-coincidence/ for information on I.C.
 func CalcIC(counts map[string]int) (float64, error) {
 	sum := 0
