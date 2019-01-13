@@ -49,15 +49,16 @@ func (g nGram) toString() string {
 	return names[g]
 }
 
+// NGramStats provides a count and a probablity of that ngram occurring withing the complete set of ngrams
 type NGramStats struct {
 	Count       int
 	Probability float64
 }
 
-func (n NGramStats) setProbablity(x float64) {
-	n.Probability = x
-}
-
+// NGramCollection provides a map of stats for all the ngrams with the NGram as the key of the collection, as well as overall stats about the collection.
+// including the GramCount (number of NGrams)
+// ItemCOunt (sum of counts of all NGrams)
+// Floor probability stat for the collection
 type NGramCollection struct {
 	NGramData map[string]NGramStats
 	GramCount int
@@ -130,6 +131,7 @@ func LoadGrams(language lang, gramLength nGram) (map[string]int, error) {
 	return result, nil
 }
 
+//GetNGramStats builds an NGramCollection for an NGram data set
 func GetNGramStats(language lang, gramLength nGram) (NGramCollection, error) {
 	gramMap, err := LoadGrams(language, gramLength)
 	gramCollection := NGramCollection{NGramData: make(map[string]NGramStats)}
