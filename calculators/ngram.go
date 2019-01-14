@@ -174,10 +174,10 @@ func Score(textToEvaluate []byte, ngrams NGramCollection) float64 {
 	return score
 }
 
-func normalize(ciphertext []byte) []byte {
+func normalize(text []byte) []byte {
 	result := make([]byte, 0)
 
-	for _, b := range ciphertext {
+	for _, b := range text {
 		r := rune(b)
 		if unicode.IsLetter(r) {
 			result = append(result, byte(unicode.ToUpper(r)))
