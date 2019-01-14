@@ -56,14 +56,14 @@ type NGramStats struct {
 }
 
 // NGramCollection provides a map of stats for all the ngrams with the NGram as the key of the collection, as well as overall stats about the collection.
-// including the GramCount (number of NGrams)
+// including the GramLength (number of NGrams)
 // ItemCOunt (sum of counts of all NGrams)
 // Floor probability stat for the collection
 type NGramCollection struct {
-	NGramData map[string]NGramStats
-	GramCount int
-	ItemCount int64
-	Floor     float64
+	NGramData  map[string]NGramStats
+	GramLength int
+	ItemCount  int64
+	Floor      float64
 }
 
 // LoadGrams loads NGram data from an embedded resource for the specified language and length of gram (e.g. BI gram contains 2 letters 'AA' 'AB' etc)
@@ -132,15 +132,15 @@ func LoadGrams(language lang, gramLength nGram) (map[string]int, error) {
 }
 
 //GetNGramStats builds an NGramCollection for an NGram data set
-func GetNGramStats(language lang, gramLength nGram) (NGramCollection, error) {
-	gramMap, err := LoadGrams(language, gramLength)
+func GetNGramStats(language lang, ngramType nGram) (NGramCollection, error) {
+	gramMap, err := LoadGrams(language, ngramType)
 	gramCollection := NGramCollection{NGramData: make(map[string]NGramStats)}
 	if err != nil {
 		return gramCollection, err
 	}
 
 	// whole collection info
-	gramCollection.GramCount = len(gramMap)
+	gramCollection.GramLength = int(ngramType) + 1
 	//gramCollection.NGramData = make(map[string]NGramStats)
 	for _, count := range gramMap {
 		gramCollection.ItemCount += int64(count)
@@ -157,6 +157,21 @@ func GetNGramStats(language lang, gramLength nGram) (NGramCollection, error) {
 	}
 
 	return gramCollection, nil
+}
+
+// Score a sample text (clear or cipher) against an ngram set. More negative scores indicate more randomness,
+// less negative scores indicate text that is much closer to the language of the ngram set
+func Score(textToEvaluate []byte, ngrams NGramCollection) float64 {
+	normalizedText := normalize(textToEvaluate)
+	score := 0.0
+	for i := 0; i < len(normalizedText)-ngrams.GramLength+1; i++ {
+		if ng, ok := ngrams.NGramData[string(normalizedText[i:i+ngrams.GramLength])]; ok {
+			score += ng.Probability
+		} else {
+			score += ngrams.Floor
+		}
+	}
+	return score
 }
 
 func normalize(ciphertext []byte) []byte {
