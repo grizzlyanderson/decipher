@@ -5,6 +5,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/decipher/cipher"
 	"github.com/grizzlyanderson/decipher/calculators"
 	"github.com/labstack/gommon/log"
 	"io/ioutil"
@@ -64,7 +65,9 @@ func main() {
 
 	randoStats := calculators.Score([]byte(randStringBytesRmndr(256)), setStates)
 
-	fmt.Printf("English language: %v\nRandom text: %v\nExample Sscore: %v", englishScore, randoStats, exampleScore)
+	fmt.Printf("English language: %v\nRandom text: %v\nExample Score: %v\n", englishScore, randoStats, exampleScore)
+
+	cipher.ShowPossiblePeriods(ciphertext, 15)
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
