@@ -20,7 +20,7 @@ func ShowPossiblePeriods(cipherchars []byte, maxPeriod int) {
 func PeriodIC(cipherchars []byte, period int) float64 {
 	periodicChars := calculators.PeriodSplit(cipherchars, period)
 
-	var periodAvgIC float64
+	var cumulatinveIC float64
 
 	for _, periodChars := range periodicChars {
 		c, err := calculators.CountByCharacters(periodChars, true)
@@ -33,11 +33,13 @@ func PeriodIC(cipherchars []byte, period int) float64 {
 			fmt.Println(err)
 			return math.NaN()
 		}
-		periodAvgIC += v
-		if periodAvgIC == math.NaN() {
+		cumulatinveIC += v
+		if cumulatinveIC == math.NaN() {
 			fmt.Println("Oh shit:: periodChars: %v\n  v: %v\n  c: %v\n  err: %v\n", periodChars, v, c, err)
 		}
 	}
+	// TODO - something is wrong - the values are coming out way too high, but not figuring it out tonight
+	periodicIC := cumulatinveIC / float64(period)
 
-	return periodAvgIC / float64(period)
+	return periodicIC
 }
