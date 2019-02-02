@@ -30,14 +30,14 @@ func main() {
 			fmt.Println("A Key must be supplied when enciphering")
 			return
 		}
-		doEncipher(useCipher, inputfile, key)
+		doEncipher(useCipher, inputfile, key, ignoreSpacess)
 		return
 	}
 
 	doDecypheryStuff(inputfile, ignoreSpacess)
 }
 
-func doEncipher(useCipher, inputfile, key string) {
+func doEncipher(useCipher, inputfile, key string, ignoreSpaces bool) {
 	// only one so whatever
 	log.Info("using " + useCipher)
 	plaintext, _ := ioutil.ReadFile(inputfile)
@@ -49,8 +49,12 @@ func doEncipher(useCipher, inputfile, key string) {
 		prettyPrint(vc.Encipher(string(plaintext)))
 	case "ceasar":
 		s, _ := strconv.ParseUint(key, 10, 8)
-		cc := cipher.Rot(string(plaintext), uint8(s))
-		prettyPrint(cc)
+		if ignoreSpaces {
+			cc := cipher.Rot(string(plaintext), uint8(s))
+			prettyPrint(cc)
+		} else {
+			fmt.Println(cipher.ROTWithCase(plaintext, uint8(s)))
+		}
 	default:
 		fmt.Printf("Unknown cipher type '%s'. Allowed types 'ceasar', 'vignere'\n", useCipher)
 	}
