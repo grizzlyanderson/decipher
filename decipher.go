@@ -48,17 +48,29 @@ func doEncipher(useCipher, inputfile, key string, ignoreSpaces bool) {
 		// TODO should probably refactor encipher to take []byte
 		prettyPrint(vc.Encipher(string(plaintext)))
 	case "ceasar":
-		s, _ := strconv.ParseUint(key, 10, 8)
-		if ignoreSpaces {
-			cc := cipher.Rot(string(plaintext), uint8(s))
-			prettyPrint(cc)
+		if key == "all" {
+			var s uint64 = 1
+			for ; s <=25; s++ {
+				fmt.Printf("Shift by %v:", s)
+				runRot(ignoreSpaces, plaintext, s)
+			}
 		} else {
-			fmt.Println(cipher.ROTWithCase(plaintext, uint8(s)))
+			s, _ := strconv.ParseUint(key, 10, 8)
+			runRot(ignoreSpaces, plaintext, s)
 		}
 	default:
 		fmt.Printf("Unknown cipher type '%s'. Allowed types 'ceasar', 'vignere'\n", useCipher)
 	}
 
+}
+
+func runRot(ignoreSpaces bool, plaintext []byte, s uint64) {
+	if ignoreSpaces {
+		cc := cipher.Rot(string(plaintext), uint8(s))
+		prettyPrint(cc)
+	} else {
+		fmt.Println(cipher.ROTWithCase(plaintext, uint8(s)))
+	}
 }
 
 func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
