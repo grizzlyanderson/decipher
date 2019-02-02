@@ -5,12 +5,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/decipher/calculators"
 	"github.com/decipher/cipher"
-	"github.com/grizzlyanderson/decipher/calculators"
 	"github.com/labstack/gommon/log"
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -41,13 +42,23 @@ func doEncipher(useCipher, inputfile, key string) {
 	log.Info("using " + useCipher)
 	plaintext, _ := ioutil.ReadFile(inputfile)
 
-	vc := cipher.NewVignere(key)
-	// TODO should probably refactor encipher to take []byte
-	prettyPrint(vc.Encipher(string(plaintext)))
+	switch useCipher {
+	case "vignere":
+		vc := cipher.NewVignere(key)
+		// TODO should probably refactor encipher to take []byte
+		prettyPrint(vc.Encipher(string(plaintext)))
+	case "ceasar":
+		s, _ := strconv.ParseUint(key, 10, 8)
+		cc := cipher.Rot(string(plaintext), uint8(s))
+		prettyPrint(cc)
+	default:
+		fmt.Printf("Unknown cipher type '%s'. Allowed types 'ceasar', 'vignere'\n", useCipher)
+	}
+
 }
 
 func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
-	fmt.Println("Input file path: ", inputfile)
+	fmt.Printf("Input file path: %s\n", inputfile)
 	if "" == inputfile {
 		flag.PrintDefaults()
 		os.Exit(1)

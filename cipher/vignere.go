@@ -1,8 +1,8 @@
 package cipher
 
 import (
+	"github.com/decipher/calculators"
 	"strings"
-	"unicode"
 )
 
 const startPoint uint8 = 65 // English ASCII byte for letter A
@@ -15,13 +15,13 @@ type Vignere struct {
 
 // NewVignere initializes a new struct with the enciphering key
 func NewVignere(key string) *Vignere {
-	return &Vignere{normalize(key), len(key)}
+	return &Vignere{calculators.Normalize(key), len(key)}
 }
 
 // Encipher plain text to cipher text using Vignere substitution with the initialized key
 // all letters will be converted to upper case, all spaces/non-letters will be removed, including numbers
 func (v *Vignere) Encipher(plaintText string) string {
-	pt := normalize(plaintText)
+	pt := calculators.Normalize(plaintText)
 	var ct strings.Builder
 
 	for i, c := range pt {
@@ -38,7 +38,7 @@ func (v *Vignere) Encipher(plaintText string) string {
 // Decipher Vignere encrypted text using the initialized key
 // result will be all uppercase with no spaces
 func (v *Vignere) Decipher(cipherText string) string {
-	ct := normalize(cipherText)
+	ct := calculators.Normalize(cipherText)
 	var pt strings.Builder
 
 	for i, c := range ct {
@@ -50,20 +50,6 @@ func (v *Vignere) Decipher(cipherText string) string {
 		pt.WriteByte(i2b(pi))
 	}
 	return pt.String()
-}
-
-// normalize string to all upper case, letters only
-func normalize(text string) string {
-	var result strings.Builder
-
-	for _, b := range text {
-		r := rune(b)
-		if unicode.IsLetter(r) {
-			result.WriteRune(unicode.ToUpper(r))
-		}
-	}
-
-	return result.String()
 }
 
 // convert alpha to integer (0-25); byte(uint8) to integer; or back; where integer is the - based ordinal of the letter in the alphabet
