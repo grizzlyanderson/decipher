@@ -1,7 +1,7 @@
 package cipher
 
 import (
-	"github.com/decipher/calculators"
+	"github.com/grizzlyanderson/decipher/calculators"
 	"strings"
 )
 

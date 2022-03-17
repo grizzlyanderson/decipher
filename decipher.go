@@ -5,8 +5,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/decipher/calculators"
-	"github.com/decipher/cipher"
+	"github.com/grizzlyanderson/decipher/calculators"
+	"github.com/grizzlyanderson/decipher/cipher"
 	"github.com/labstack/gommon/log"
 	"io/ioutil"
 	"math/rand"
@@ -50,7 +50,7 @@ func doEncipher(useCipher, inputfile, key string, ignoreSpaces bool) {
 	case "ceasar":
 		if key == "all" {
 			var s uint64 = 1
-			for ; s <=25; s++ {
+			for ; s <= 25; s++ {
 				fmt.Printf("Shift by %v:", s)
 				runRot(ignoreSpaces, plaintext, s)
 			}

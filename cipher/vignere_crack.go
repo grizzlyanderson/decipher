@@ -2,7 +2,7 @@ package cipher
 
 import (
 	"fmt"
-	"github.com/decipher/calculators"
+	"github.com/grizzlyanderson/decipher/calculators"
 	"math"
 )
 

@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	data2 "github.com/grizzlyanderson/decipher/data"
-	"github.com/labstack/gommon/log"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"math"
 	"strconv"

@@ -1,7 +1,7 @@
 package cipher
 
 import (
-	"github.com/decipher/calculators"
+	"github.com/grizzlyanderson/decipher/calculators"
 	"strings"
 )
 
@@ -32,4 +32,3 @@ func ROTWithCase(plaintext []byte, shift uint8) string {
 	}
 	return result.String()
 }
-
