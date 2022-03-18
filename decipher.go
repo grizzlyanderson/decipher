@@ -107,7 +107,7 @@ func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
 	exampleScore := calculators.Score([]byte("ATTACK THE EAST WALL OF THE CASTLE AT DAWN"), setStates)
 	randoStats := calculators.Score([]byte(randStringBytesRmndr(256)), setStates)
 	log.Printf("English language: %v\nRandom text: %v\nExample Score: %v\n", englishScore, randoStats, exampleScore)
-	cipher.ShowPossiblePeriods(ciphertext, 15)
+	cipher.GetPossiblePeriods(ciphertext, 15)
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

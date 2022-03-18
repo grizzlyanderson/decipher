@@ -18,3 +18,14 @@ func Normalize(text string) string {
 
 	return result.String()
 }
+
+func purgeWhitespace(cipherchars []byte) []byte {
+	var result []byte
+	for _, c := range cipherchars {
+		if !isSpace(c) {
+			result = append(result, c)
+		}
+	}
+
+	return result
+}

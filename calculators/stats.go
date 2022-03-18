@@ -1,5 +1,7 @@
 package calculators
 
+import "math"
+
 // isSpace reports whether the byte is a space character.
 // isSpace defines a space as being among the following bytes: ' ', '\t', '\n' and '\r'.
 func isSpace(b byte) bool {
@@ -38,4 +40,12 @@ func CalcICForCharMap(counts map[byte]int) (float64, error) {
 	ic := float64(sum) / float64(totCount*(totCount-1))
 
 	return ic, nil
+}
+
+func CalcICForCyphertext(cyphertext []byte) (float64, error) {
+	if charMap, err := CountByCharacters(cyphertext, true); err == nil {
+		return CalcICForCharMap(charMap)
+	} else {
+		return math.NaN(), err
+	}
 }

@@ -1,20 +1,37 @@
 package cipher
 
 import (
+	"fmt"
 	"github.com/grizzlyanderson/decipher/calculators"
 	log "github.com/sirupsen/logrus"
 	"math"
+	"strings"
 )
 
 func FindKeyLengths(cipherchars []byte, period int) {
 	// TODO - identify likely targests and return lengths by looking for local maxes, ideally that occur a intervals of N
 }
 
-func ShowPossiblePeriods(cipherchars []byte, maxPeriod int) {
+func GetPossiblePeriods(cipherchars []byte, maxPeriod int) (result map[int]float64) {
 	// TODO - use dynamic channels & assemble back to map keyed on period length
-	for i := 2; i <= maxPeriod; i++ {
-		log.Debugf("Period %v: %v\n", i, PeriodIC(cipherchars, i))
+	result = make(map[int]float64)
+	for i := 1; i <= maxPeriod; i++ {
+		ic := PeriodIC(cipherchars, i)
+
+		log.Debugf("Period %v: %v\n", i, ic)
+		result[i] = ic
 	}
+	return result
+}
+
+func ShowPossiblePeriods(ciperchars []byte, maxPeriod int) {
+	periodICs := GetPossiblePeriods(ciperchars, maxPeriod)
+
+	for i := 0; i < len(periodICs); i++ {
+		fmt.Printf("%-*v: %s%+25v\n", 2, i+1, strings.Repeat("x", int(periodICs[i]*500)), periodICs[i])
+
+	}
+
 }
 
 // PeriodIC splits the cipher text into a period of N, calculates the I.C. for each set and returns the avg I.C. for the entire period
@@ -49,14 +66,23 @@ func PeriodIC(cipherchars []byte, period int) float64 {
 func PeriodIC2(ciphertext []byte, period int) (float64, error) {
 
 	// if period == 1, return plain IC
+	if period == 1 {
+		return calculators.CalcICForCyphertext(ciphertext)
+	}
 
 	// for periods 2 -> N, get N slices containing ever Nth character starting from 0th, to N-1th
 	// eg period 3 0,3,6,9...; 1,4,7,10,...; 2,5,8,11...
-	// average each of the ICs
-	// return IC for the period
+	periodicCypherChars := calculators.PeriodSplit(ciphertext, period)
+	sumIC := 0.0
+	for _, cypherChars := range periodicCypherChars {
+		ic, err := calculators.CalcICForCyphertext(cypherChars)
+		if err != nil {
+			return math.NaN(), err
+		}
+		log.Info(ic)
+		sumIC += ic
+	}
 
-	ic := 0.0
-
-	return ic, nil
+	return sumIC / float64(period), nil
 
 }
