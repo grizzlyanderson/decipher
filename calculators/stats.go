@@ -20,9 +20,9 @@ func CountByCharacters(cypherChars []byte, ignoreWitespace bool) (charCounts map
 	return charCounts, nil
 }
 
-// CalcIC returns Index of Coincidence for map of counts by character from a ciphertext
+// CalcICForCharMap returns Index of Coincidence for map of counts by character from a ciphertext
 // See http://practicalcryptography.com/cryptanalysis/text-characterisation/index-coincidence/ for information on I.C.
-func CalcIC(counts map[byte]int) (float64, error) {
+func CalcICForCharMap(counts map[byte]int) (float64, error) {
 	sum := 0
 	totCount := 0
 

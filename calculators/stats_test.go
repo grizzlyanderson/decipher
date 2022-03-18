@@ -73,7 +73,7 @@ func TestCalcIC(t *testing.T) {
 	expectedHigh := 0.0684
 	expectedLow := 0.0682
 	charCount, _ := CountByCharacters([]byte(Normalize(data.PlainTextString)), true)
-	ic, e := CalcIC(charCount)
+	ic, e := CalcICForCharMap(charCount)
 
 	assert.Nil(t, e)
 	// getting slightly different values calculating ic on practicalcryptography, other sources so expect within a narrow range.

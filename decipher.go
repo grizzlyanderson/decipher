@@ -88,7 +88,7 @@ func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
 	charCounts, _ := calculators.CountByCharacters(ciphertext, ignoreSpacess)
 	log.Println(charCounts)
 	log.Println(len(charCounts))
-	ic, _ := calculators.CalcIC(charCounts)
+	ic, _ := calculators.CalcICForCharMap(charCounts)
 	log.Debugf("I.C. is %v.\n", ic)
 	quadGram, err := calculators.LoadGrams(calculators.Eng, calculators.Quad)
 	if err != nil {
