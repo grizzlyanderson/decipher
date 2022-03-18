@@ -29,7 +29,8 @@ func (v *Vignere) Encipher(plaintText string) string {
 		kidx := i % v.l
 		ki := a2i(v.key[kidx : kidx+1])
 		pi := b2i(uint8(c))
-		ci := (pi + ki) % 26
+		// decimal values of letters are 0 based, need to shift to 1 based for mod math
+		ci := (pi + ki + 1) % 26
 		ct.WriteByte(i2b(ci))
 	}
 	return ct.String()
@@ -45,8 +46,8 @@ func (v *Vignere) Decipher(cipherText string) string {
 		kidx := i % v.l
 		ki := a2i(v.key[kidx : kidx+1])
 		ci := b2i(uint8(c))
-		// (cipher index + mod val - key index) mod val = plain index
-		pi := (ci - ki + 26) % 26
+		// (cipher index - key index + [0 based] mod val) mod val = plain index
+		pi := (ci - ki + 25) % 26
 		pt.WriteByte(i2b(pi))
 	}
 	return pt.String()

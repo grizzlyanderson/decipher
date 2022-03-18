@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/grizzlyanderson/decipher/calculators"
 	"github.com/grizzlyanderson/decipher/cipher"
-	"github.com/labstack/gommon/log"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -15,12 +15,13 @@ import (
 )
 
 func main() {
+	log.SetLevel(log.DebugLevel)
 	var inputfile, useCipher, key string
 	var ignoreSpacess, textOnly bool
 	flag.StringVar(&inputfile, "f", "", "source ciphertext file")
 	flag.BoolVar(&ignoreSpacess, "s", true, "ingnore spaces in ciphertext")
 	flag.BoolVar(&textOnly, "t", true, "ciphertext is ASCII only")
-	flag.StringVar(&useCipher, "c", "", "encipher with named cipher, leave blank to attempt decipher")
+	flag.StringVar(&useCipher, "c", "", "encipher with named cipher, leave blank to attempt decipher [vignere|ceaser]")
 	flag.StringVar(&key, "k", "", "key for enciphering")
 
 	flag.Parse()
@@ -74,7 +75,7 @@ func runRot(ignoreSpaces bool, plaintext []byte, s uint64) {
 }
 
 func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
-	fmt.Printf("Input file path: %s\n", inputfile)
+	log.Debugf("Input file path: %s\n", inputfile)
 	if "" == inputfile {
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -82,30 +83,30 @@ func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
 	// trivial read - not a good idea for larger files
 	// also, blowing off err - very bad
 	ciphertext, _ := ioutil.ReadFile(inputfile)
-	fmt.Println(ciphertext)
-	fmt.Println(string(ciphertext))
+	log.Println(ciphertext)
+	log.Println(string(ciphertext))
 	charCounts, _ := calculators.CountByCharacters(ciphertext, ignoreSpacess)
-	fmt.Println(charCounts)
-	fmt.Println(len(charCounts))
+	log.Println(charCounts)
+	log.Println(len(charCounts))
 	ic, _ := calculators.CalcIC(charCounts)
-	fmt.Printf("I.C. is %v.\n", ic)
+	log.Debugf("I.C. is %v.\n", ic)
 	quadGram, err := calculators.LoadGrams(calculators.Eng, calculators.Quad)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//fmt.Println(quadGram)
-	fmt.Printf("number of quadgrams is %v\n", len(quadGram))
-	fmt.Printf("Gram 'TION' count is %v\n", quadGram["TION"])
+	//log.Println(quadGram)
+	log.Printf("number of quadgrams is %v\n", len(quadGram))
+	log.Printf("Gram 'TION' count is %v\n", quadGram["TION"])
 	setStates, err := calculators.GetNGramStats(calculators.Eng, calculators.Quad)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Gram 'TION' count is %v and probability is %v\n", setStates.NGramData["TION"].Count, setStates.NGramData["TION"].Probability)
+	log.Printf("Gram 'TION' count is %v and probability is %v\n", setStates.NGramData["TION"].Count, setStates.NGramData["TION"].Probability)
 	englishScore := calculators.Score([]byte("The quick brown fox jumped over the lazy dog Now is the time for all good englishment to come to the aid of their country To be or not to be, that is the question Weather tis nobler in the mind to suffer the slings and arrows of outragours misfortune"),
 		setStates)
 	exampleScore := calculators.Score([]byte("ATTACK THE EAST WALL OF THE CASTLE AT DAWN"), setStates)
 	randoStats := calculators.Score([]byte(randStringBytesRmndr(256)), setStates)
-	fmt.Printf("English language: %v\nRandom text: %v\nExample Score: %v\n", englishScore, randoStats, exampleScore)
+	log.Printf("English language: %v\nRandom text: %v\nExample Score: %v\n", englishScore, randoStats, exampleScore)
 	cipher.ShowPossiblePeriods(ciphertext, 15)
 }
 

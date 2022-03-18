@@ -1,8 +1,8 @@
 package cipher
 
 import (
-	"fmt"
 	"github.com/grizzlyanderson/decipher/calculators"
+	log "github.com/sirupsen/logrus"
 	"math"
 )
 
@@ -12,7 +12,7 @@ func FindKeyLengths(cipherchars []byte, period int) {
 
 func ShowPossiblePeriods(cipherchars []byte, maxPeriod int) {
 	for i := 2; i <= maxPeriod; i++ {
-		fmt.Printf("Period %v: %v\n", i, PeriodIC(cipherchars, i))
+		log.Debugf("Period %v: %v\n", i, PeriodIC(cipherchars, i))
 	}
 }
 
@@ -25,20 +25,21 @@ func PeriodIC(cipherchars []byte, period int) float64 {
 	for _, periodChars := range periodicChars {
 		c, err := calculators.CountByCharacters(periodChars, true)
 		if err != nil {
-			fmt.Println(err)
+			log.Error(err)
 			return math.NaN()
 		}
 		v, err := calculators.CalcIC(c)
 		if err != nil {
-			fmt.Println(err)
+			log.Error(err)
 			return math.NaN()
 		}
 		cumulatinveIC += v
 		if cumulatinveIC == math.NaN() {
-			fmt.Println("Oh shit:: periodChars: %v\n  v: %v\n  c: %v\n  err: %v\n", periodChars, v, c, err)
+			log.Errorf("Oh shit:: periodChars: %v\n  v: %v\n  c: %v\n  err: %v\n", periodChars, v, c, err)
 		}
 	}
 	// TODO - something is wrong - the values are coming out way too high, but not figuring it out tonight
+	log.Debugf("cumulativeIC: %v      period: %v", cumulatinveIC, period)
 	periodicIC := cumulatinveIC / float64(period)
 
 	return periodicIC
