@@ -9,11 +9,9 @@ func TestVignere_EncipherTrivialKey(t *testing.T) {
 	key := "A"
 	plainText := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	expectedText := "BCDEFGHIJKLMNOPQRSTUVWXYZA"
-	t.Log(plainText)
 
 	vc := NewVignere(key)
 	cipherText := vc.Encipher(plainText)
-	t.Log(cipherText)
 
 	//assert.Equalf(t, expectedText, cipherText, "expected '%s', got '%s'", expectedText, cipherText)
 	assert.Equal(t, expectedText, cipherText)
