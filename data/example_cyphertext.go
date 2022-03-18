@@ -2,10 +2,10 @@ package data
 
 import _ "embed"
 
-//go:embed plaintext.txt
+//go:embed ciphertext_vignere_CoreyDoctorow.txt
 var CypherTextVignereBytes []byte
 
-//go:embed plaintext.txt
+//go:embed ciphertext_vignere_CoreyDoctorow.txt
 var CypherTextVignereString string
 
-const VignereExampleKey = "CoreyDoctrow"
+const VignereExampleKey = "CoreyDoctorow"

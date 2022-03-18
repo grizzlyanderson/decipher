@@ -26,9 +26,9 @@ func GetPossiblePeriods(cipherchars []byte, maxPeriod int) (result map[int]float
 
 func ShowPossiblePeriods(ciperchars []byte, maxPeriod int) {
 	periodICs := GetPossiblePeriods(ciperchars, maxPeriod)
-
-	for i := 0; i < len(periodICs); i++ {
-		fmt.Printf("%-*v: %s%+25v\n", 2, i+1, strings.Repeat("x", int(periodICs[i]*500)), periodICs[i])
+	fmt.Printf("key: %-25s: val X 500\n", "IC Val")
+	for i := 1; i <= len(periodICs); i++ {
+		fmt.Printf("%-*v: %-25v: %s\n", 3, i, periodICs[i], strings.Repeat("x", int(periodICs[i]*500)))
 
 	}
 
