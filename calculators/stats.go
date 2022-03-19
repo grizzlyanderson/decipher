@@ -1,3 +1,6 @@
+// Package calculators contains an assortment of calculation functions to manipulate []byte of
+// ciphertext characters for use in different types of anlysis or to actually perform various
+// statistical analysis.
 package calculators
 
 import "math"
@@ -42,10 +45,10 @@ func CalcICForCharMap(counts map[byte]int) (float64, error) {
 	return ic, nil
 }
 
-func CalcICForCyphertext(cyphertext []byte) (float64, error) {
-	if charMap, err := CountByCharacters(cyphertext, true); err == nil {
-		return CalcICForCharMap(charMap)
-	} else {
+func CalcICForCiphertext(ciphertext []byte) (float64, error) {
+	if charMap, err := CountByCharacters(ciphertext, true); err != nil {
 		return math.NaN(), err
+	} else {
+		return CalcICForCharMap(charMap)
 	}
 }
