@@ -31,7 +31,6 @@ func TestPeriodICPeriodOf3PlainEnglish(t *testing.T) {
 }
 
 func TestGetPossiblePeriods(t *testing.T) {
-	log.SetLevel(log.DebugLevel)
 	cyphertext := []byte(calculators.Normalize(data.CypherTextVignereString))
 	expectedKeyLength := len(data.VignereExampleKey)
 	periods := int(float64(expectedKeyLength) * 1.5)
@@ -51,4 +50,18 @@ func TestShowPossiblePeriods(t *testing.T) {
 	expectedKeyLength := len(data.VignereExampleKey)
 	periods := int(float64(expectedKeyLength) * 1.5)
 	ShowPossiblePeriods(cyphertext, periods)
+}
+
+func TestGuessVignereKeyLength(t *testing.T) {
+	periodicICs := map[int]float64{
+		1: 0.001,
+		2: 0.0122,
+		3: 0.0132,
+		4: 0.047,
+		5: 0.025,
+		6: 0.0188,
+	}
+
+	keylength := GuessVignereKeyLength(periodicICs)
+	assert.Equal(t, 4, keylength)
 }

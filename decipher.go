@@ -108,6 +108,8 @@ func doDecypheryStuff(inputfile string, ignoreSpacess bool) {
 	randoStats := calculators.Score([]byte(randStringBytesRmndr(256)), setStates)
 	log.Printf("English language: %v\nRandom text: %v\nExample Score: %v\n", englishScore, randoStats, exampleScore)
 	cipher.ShowPossiblePeriods(ciphertext, 15)
+	periodICs := cipher.GetPossiblePeriods(ciphertext, 15)
+	log.Printf("The probable Vignere Key Length is %d", cipher.GuessVignereKeyLength(periodICs))
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

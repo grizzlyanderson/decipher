@@ -8,8 +8,16 @@ import (
 	"strings"
 )
 
-func FindKeyLengths(cipherchars []byte, period int) {
-	// TODO - identify likely targests and return lengths by looking for local maxes, ideally that occur a intervals of N
+func GuessVignereKeyLength(periodICs map[int]float64) (keylength int) {
+	maxIC := 0.0
+	keylength = int(math.NaN())
+	for k, ic := range periodICs {
+		if ic > maxIC {
+			maxIC = ic
+			keylength = k
+		}
+	}
+	return keylength
 }
 
 // GetPossiblePeriods is primarily used to guess the length of key for a vignere cipher.
@@ -67,5 +75,4 @@ func PeriodIC(ciphertext []byte, period int) (float64, error) {
 	}
 
 	return sumIC / float64(period), nil
-
 }
